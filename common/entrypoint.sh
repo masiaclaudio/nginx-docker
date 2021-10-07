@@ -212,7 +212,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			exit 1
 		fi
 	else
-		echo "Error: Incorrect SERVER_ROLE environment variable. Supported  values are 'upstream' and 'proxy'."
+		echo "Error: Incorrect SERVER_ROLE environment variable. Supported  values are 'upstream*' and 'proxy'."
 		exit 1
 	fi
 
