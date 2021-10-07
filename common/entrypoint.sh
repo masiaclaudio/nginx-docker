@@ -31,7 +31,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 
 	# Check if the required environment variables are set and create configuration files
 	# if [ "$SERVER_ROLE" == "upstream" ]; then
-	if [ "$SERVER_ROLE" == "upstream*" ]; then
+	if [[ "$SERVER_ROLE" == upstream* ]] && [ -d /templates/"${SERVER_ROLE}" ]; then
 		echo "AUTO_CONFIGURE enabled, starting auto configuration with upstream as SERVER_ROLE."
 		# Check if the required environment variables are set and create configuration files
 		if [ "$CONTAINER_NAME" ] && [ "$DOMAIN_NAME" ] && [ "$PHP_CONTAINER_NAME" ]; then
