@@ -30,7 +30,8 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 	SHELL_FORMAT='$CONTAINER_NAME,$DOMAIN_NAME,$PHP_CONTAINER_NAME,$_UPSTREAM_CONTAINER_NAME,$_UPSTREAM_DOMAIN_NAME'
 
 	# Check if the required environment variables are set and create configuration files
-	if [ "$SERVER_ROLE" == "upstream" ]; then
+	# if [ "$SERVER_ROLE" == "upstream" ]; then
+	if [ "$SERVER_ROLE" == "upstream*" ]; then
 		echo "AUTO_CONFIGURE enabled, starting auto configuration with upstream as SERVER_ROLE."
 		# Check if the required environment variables are set and create configuration files
 		if [ "$CONTAINER_NAME" ] && [ "$DOMAIN_NAME" ] && [ "$PHP_CONTAINER_NAME" ]; then
@@ -38,7 +39,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			if [ ! -f /configurations/nginx.conf ]; then
 				echo "Creating configuration file '/configurations/nginx.conf' from template."
 				# Substitute the values of environment variables to create the real configuration file from template
-				envsubst "$SHELL_FORMAT" < /templates/upstream/nginx.conf > /configurations/nginx.conf
+				envsubst "$SHELL_FORMAT" < /templates/"${SERVER_ROLE}"/nginx.conf > /configurations/nginx.conf
 			else
 				echo "Configuration file '/configurations/nginx.conf' already exists, skipping file creation. You can edit the file according to your needs."
 			fi
@@ -47,7 +48,7 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			if [ ! -f /configurations/nginx-default.conf ]; then
 				echo "Creating configuration file '/configurations/nginx-default.conf' from template."
 				# Substitute the values of environment variables to create the real configuration file from template
-				envsubst "$SHELL_FORMAT" < /templates/upstream/nginx-default.conf > /configurations/nginx-default.conf
+				envsubst "$SHELL_FORMAT" < /templates/"${SERVER_ROLE}"/nginx-default.conf > /configurations/nginx-default.conf
 			else
 				echo "Configuration file '/configurations/nginx-default.conf' already exists, skipping file creation. You can edit the file according to your needs."
 			fi
@@ -56,12 +57,12 @@ if [ "$AUTO_CONFIGURE" == "enable" ]; then
 			if [ ! -f /configurations/nginx-php.conf ]; then
 				echo "Creating configuration file '/configurations/nginx-php.conf' from template."
 				# Substitute the values of environment variables to create the real configuration file from template
-				envsubst "$SHELL_FORMAT" < /templates/upstream/nginx-php.conf > /configurations/nginx-php.conf
+				envsubst "$SHELL_FORMAT" < /templates/"${SERVER_ROLE}"/nginx-php.conf > /configurations/nginx-php.conf
 			else
 				echo "Configuration file '/configurations/nginx-php.conf' already exists, skipping file creation. You can edit the file according to your needs."
 			fi
 		else
-			echo "Error: One or more environment variable required for AUTO_CONFIGURE with upstream as SERVER_ROLE is not set, please check: CONTAINER_NAME, DOMAIN_NAME, PHP_CONTAINER_NAME"
+			echo "Error: One or more environment variable required for AUTO_CONFIGURE with ${SERVER_ROLE} as SERVER_ROLE is not set, please check: CONTAINER_NAME, DOMAIN_NAME, PHP_CONTAINER_NAME"
 			exit 1
 		fi
 	elif [ "$SERVER_ROLE" == "proxy" ]; then
